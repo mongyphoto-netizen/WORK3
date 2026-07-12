@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const areasList = document.getElementById('areasList');
     
     // TODO: ใส่ URL ของ Google Apps Script Web App ของคุณที่นี่
-    const GOOGLE_SCRIPT_URL = "YOUR_GOOGLE_SCRIPT_WEB_APP_URL_HERE";
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzP4Ie4QUIW4sgXleRfvMhb2Bk8xAFhnN5vI_q4oE6nAfzCWX9_Yb5-C6236u57okDR/exec";
 
     let currentAreaCount = 0;
 

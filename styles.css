@@ -457,3 +457,54 @@ textarea:focus {
         transform: translateY(0);
     }
 }
+
+/* Scoring Criteria */
+.scoring-criteria {
+    background: rgba(0, 119, 182, 0.05);
+    border: 1px solid rgba(0, 119, 182, 0.15);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.scoring-criteria h4 {
+    color: var(--primary-dark);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    border-bottom: 1px solid rgba(0, 119, 182, 0.1);
+    padding-bottom: 0.5rem;
+}
+
+.criteria-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.criteria-col strong {
+    display: block;
+    color: var(--primary);
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+}
+
+.criteria-col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.criteria-col li {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+}
+
+.criteria-col li span {
+    font-weight: 600;
+    color: var(--text-main);
+    width: 28px;
+    display: inline-block;
+}

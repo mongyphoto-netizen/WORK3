@@ -147,15 +147,83 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('surveyForm');
     const modal = document.getElementById('successModal');
     const closeModalBtn = document.getElementById('closeModalBtn');
+    const submitBtn = document.getElementById('submitBtn');
 
-    form.addEventListener('submit', (e) => {
+    // TODO: ใส่ URL ของ Google Apps Script Web App ของคุณที่นี่
+    const GOOGLE_SCRIPT_URL = "YOUR_GOOGLE_SCRIPT_WEB_APP_URL_HERE";
+
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        // In a real application, you would gather all data here and send to backend
-        // const formData = new FormData(form);
+        // 1. Gather Community Info & Grand Total
+        const communityName = document.getElementById('communityName').value;
+        const totalScoreStr = document.getElementById('totalScore').innerText;
+        const urgencyLevelStr = document.getElementById('urgencyLevel').innerText;
         
-        // Show success modal
-        modal.classList.add('active');
+        // 2. Gather KPI Scores & Projects
+        const kpiScores = [];
+        const projects = [];
+        const agencies = [];
+        
+        kpis.forEach((_, idx) => {
+            // Scores
+            const sev = document.querySelector(`input[name="kpi_${idx}_severity"]:checked`)?.value || 0;
+            const aff = document.querySelector(`input[name="kpi_${idx}_affected"]:checked`)?.value || 0;
+            const read = document.querySelector(`input[name="kpi_${idx}_readiness"]:checked`)?.value || 0;
+            kpiScores.push({ severity: sev, affected: aff, readiness: read });
+            
+            // Projects
+            const proj = document.querySelector(`textarea[name="project_${idx}"]`)?.value || '';
+            projects.push(proj);
+            
+            // Agencies
+            const mainAg = document.querySelector(`input[name="mainAgency_${idx}"]`)?.value || '';
+            const suppAg = document.querySelector(`input[name="supportAgency_${idx}"]`)?.value || '';
+            agencies.push({ main: mainAg, support: suppAg });
+        });
+
+        // 3. Prepare Payload
+        const payload = {
+            community: communityName,
+            totalScore: totalScoreStr,
+            urgency: urgencyLevelStr,
+            kpi: kpiScores,
+            projects: projects,
+            agencies: agencies
+        };
+        
+        // Change button state
+        const originalBtnText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<span>กำลังบันทึกข้อมูล...</span>';
+        submitBtn.disabled = true;
+
+        try {
+            if (GOOGLE_SCRIPT_URL !== "YOUR_GOOGLE_SCRIPT_WEB_APP_URL_HERE") {
+                // ส่งข้อมูลไป Google Sheets
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', // สำคัญ: เพื่อไม่ให้ติดปัญหา CORS policy
+                    headers: {
+                        'Content-Type': 'text/plain;charset=utf-8',
+                    },
+                    body: JSON.stringify(payload)
+                });
+            } else {
+                console.warn("ยังไม่ได้ตั้งค่า GOOGLE_SCRIPT_URL");
+                // หน่วงเวลาจำลองการโหลด
+                await new Promise(r => setTimeout(r, 1000));
+            }
+            
+            // Show success modal
+            modal.classList.add('active');
+        } catch (error) {
+            console.error("Error submitting form:", error);
+            alert("เกิดข้อผิดพลาดในการส่งข้อมูล โปรดลองอีกครั้ง");
+        } finally {
+            // Restore button state
+            submitBtn.innerHTML = originalBtnText;
+            submitBtn.disabled = false;
+        }
     });
 
     closeModalBtn.addEventListener('click', () => {

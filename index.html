@@ -26,27 +26,35 @@
         </header>
 
         <form id="surveyForm" class="survey-form">
-            <!-- Section 1: ข้อมูลพื้นที่ -->
+            <!-- Section 1: ข้อมูลพื้นที่หลัก -->
             <section class="card form-section slide-up">
                 <div class="section-header">
                     <div class="step-number">1</div>
-                    <h2>ข้อมูลพื้นที่/ชุมชน</h2>
+                    <h2>ข้อมูลหลัก</h2>
                 </div>
-                <div class="form-group">
-                    <label for="communityName">ชื่อพื้นที่ / ชุมชนที่ควรเร่งแก้ไขปัญหา <span class="required">*</span></label>
-                    <input type="text" id="communityName" name="communityName" placeholder="เช่น หมู่บ้านร่มเย็น หรือ ซอย 4" required>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="subDistrict">ตำบล <span class="required">*</span></label>
+                        <input type="text" id="subDistrict" name="subDistrict" placeholder="เช่น ต.บางแม่นาง" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="areaCount">จำนวนพื้นที่ที่มีปัญหา <span class="required">*</span></label>
+                        <input type="number" id="areaCount" name="areaCount" min="1" max="20" placeholder="เช่น 3" required>
+                    </div>
+                </div>
+                
+                <div style="text-align: right; margin-top: 1rem;">
+                    <button type="button" class="btn-secondary" id="generateAreasBtn" style="padding: 0.6rem 1.5rem; border-radius: 8px;">
+                        สร้างแบบฟอร์มตามจำนวนพื้นที่
+                    </button>
                 </div>
             </section>
 
-            <!-- Section 2: การประเมิน 6 KPI -->
-            <section class="card form-section slide-up" style="animation-delay: 0.1s;">
-                <div class="section-header">
-                    <div class="step-number">2</div>
-                    <h2>การประเมินและเสนอโครงการตาม 6 KPI</h2>
-                </div>
-                <p class="section-desc">โปรดให้คะแนน 1-5 ในแต่ละด้าน ตามเกณฑ์ด้านล่างนี้ พร้อมทั้งระบุโครงการและหน่วยงานที่เกี่ยวข้อง</p>
+            <!-- Dynamic Areas Container -->
+            <div id="dynamicAreasContainer" style="display: none;">
                 
-                <div class="scoring-criteria">
+                <div class="scoring-criteria slide-up" style="animation-delay: 0.1s;">
                     <h4>📌 หมายเหตุ: เกณฑ์การให้คะแนน</h4>
                     <div class="criteria-grid">
                         <div class="criteria-col">
@@ -81,25 +89,16 @@
                         </div>
                     </div>
                 </div>
-                
-                <div id="kpiContainer" class="kpi-container">
-                    <!-- KPI content will be injected by JavaScript -->
-                </div>
-                
-                <div class="total-score-card slide-up">
-                    <h3>คะแนนรวมทุกด้าน</h3>
-                    <div class="score-display">
-                        <span id="totalScore">0</span> / 90
-                    </div>
-                    <div id="urgencyLevel" class="urgency-level">กรุณาประเมินให้ครบทั้ง 6 รายการ</div>
-                </div>
-            </section>
 
-            <div class="form-actions slide-up" style="animation-delay: 0.2s;">
-                <button type="submit" class="submit-btn" id="submitBtn">
-                    <span>บันทึกข้อมูลการประเมิน</span>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                </button>
+                <!-- Forms will be generated here -->
+                <div id="areasList"></div>
+
+                <div class="form-actions slide-up" style="animation-delay: 0.2s;">
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <span>บันทึกข้อมูลทุกพื้นที่</span>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    </button>
+                </div>
             </div>
         </form>
         
@@ -110,7 +109,7 @@
                     <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
                 </div>
                 <h2>บันทึกข้อมูลสำเร็จ!</h2>
-                <p>ระบบได้ทำการบันทึกข้อมูลการจัดลำดับพื้นที่ของคุณเรียบร้อยแล้ว ข้อมูลนี้จะถูกส่งไปยัง Dashboard สรุปผล</p>
+                <p>ระบบได้ทำการบันทึกข้อมูลการจัดลำดับพื้นที่ทั้งหมดของคุณเรียบร้อยแล้ว</p>
                 <button type="button" class="btn-secondary" id="closeModalBtn">กลับไปหน้าประเมินใหม่</button>
             </div>
         </div>
